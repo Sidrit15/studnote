@@ -2,157 +2,401 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudNote</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:#f1f5f9;font-family:Arial,sans-serif}
-header{background:#121a30;padding:22px;text-align:center;border-bottom:1px solid #283653}
-header h1{margin:0;color:#7c9cff;font-size:30px}
-header p{color:#a9b7d0}
-main{max-width:900px;margin:auto;padding:20px}
-.card{background:#151e33;border:1px solid #293956;border-radius:16px;padding:20px;margin-bottom:18px}
-h2{margin-top:0;color:#91aaff}
-input,select,button{width:100%;padding:12px;margin:6px 0;border-radius:9px;border:1px solid #344563;font-size:16px}
-input,select{background:#0c1427;color:white}
-button{background:#607dff;color:white;font-weight:bold;border:0;cursor:pointer}
-button:hover{background:#4965e8}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
-.stat{background:#202c48;padding:16px;border-radius:12px;text-align:center}
-.stat strong{display:block;font-size:26px;color:#9eb0ff;margin-top:8px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:11px;text-align:left;border-bottom:1px solid #344563}
-th{color:#a9baff}
-.table-wrap{overflow-x:auto}
-.small{color:#a9b7d0;font-size:13px}
-.delete{background:#bd4560;padding:7px}
-footer{text-align:center;color:#8090ad;padding:20px}
-</style>
-</head>
-<body>
-<header>
-<h1>🎓 StudNote</h1>
-<p>Le suivi scolaire entre potes</p>
-</header>
-<main>
-<section class="card">
-<h2>📊 Tableau de bord</h2>
-<div class="stats">
-<div class="stat">Nombre de notes<strong id="count">0</strong></div>
-<div class="stat">Moyenne générale<strong id="average">—</strong></div>
-<div class="stat">Élèves<strong id="students">0</strong></div>
+<meta name="theme-color" content="#0b0d12">
+<title>StudNote — Espace scolaire</title><style>
+:root {
+  --bg: #0b0d12;
+  --panel: #141820;
+  --border: #292e39;
+  --text: #f4f5f7;
+  --muted: #9299a8;
+  --orange: #ff9d42;
+  --green: #43d69b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 15% 10%, #272019 0%, transparent 38%),
+    radial-gradient(ellipse at 85% 85%, #10251e 0%, transparent 35%),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 7%;
+  border-bottom: 1px solid #ffffff12;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  color: #15110d;
+  background: linear-gradient(135deg, #ffc16f, #ff8d36);
+}
+
+.badge {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 30px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+main {
+  width: min(100% - 32px, 920px);
+  margin: 0 auto;
+  padding: 65px 0 45px;
+}
+
+.intro { text-align: center; }
+
+.eyebrow {
+  display: inline-block;
+  padding: 8px 13px;
+  border: 1px solid #ffffff17;
+  border-radius: 30px;
+  color: #ffc17e;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 23px 0 14px;
+  font-size: clamp(34px, 7vw, 58px);
+  letter-spacing: -2.5px;
+  line-height: 1.08;
+}
+
+h1 span {
+  background: linear-gradient(90deg, #ffc17e, #ff8e49);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  max-width: 520px;
+  margin: 0 auto;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.profiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 43px;
+}
+
+.profile {
+  position: relative;
+  overflow: hidden;
+  padding: 27px;
+  background: linear-gradient(145deg, #191d26, #11141b);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  transition: transform .2s, border-color .2s;
+}
+
+.profile:hover {
+  transform: translateY(-4px);
+}
+
+.profile.student:hover { border-color: var(--orange); }
+.profile.teacher:hover { border-color: var(--green); }
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  font-size: 28px;
+  margin-bottom: 23px;
+}
+
+.student .icon {
+  background: #ff9d421a;
+  border: 1px solid #ff9d4245;
+}
+
+.teacher .icon {
+  background: #43d69b1a;
+  border: 1px solid #43d69b45;
+}
+
+.profile h2 {
+  font-size: 25px;
+  margin: 0 0 9px;
+}
+
+.profile p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 44px;
+  margin-bottom: 22px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px;
+}
+
+li {
+  color: #c5cad4;
+  font-size: 13px;
+  margin: 13px 0;
+}
+
+li::before {
+  content: "✓";
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.student li::before { color: var(--orange); }
+.teacher li::before { color: var(--green); }
+
+.profile button, .back, .submit {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px;
+  color: #101217;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter .2s;
+}
+
+.profile button:hover, .submit:hover {
+  filter: brightness(1.1);
+}
+
+.student button { background: var(--orange); }
+.teacher button { background: var(--green); }
+
+.security {
+  margin: 24px auto 0;
+  padding: 15px;
+  border: 1px solid #ffffff10;
+  border-radius: 13px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 20px;
+  text-align: center;
+  color: #737b8b;
+  font-size: 12px;
+}
+
+.login {
+  display: none;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid var(--border);
+  background: #141820;
+  border-radius: 22px;
+}
+
+.login h2 { margin-top: 0; }
+
+.login label {
+  display: block;
+  margin: 17px 0 8px;
+  font-size: 13px;
+  color: #c5cad4;
+}
+
+.login input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border);
+  background: #0b0d12;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.login .back {
+  margin-top: 12px;
+  color: #d1d5df;
+  background: #252a35;
+}
+
+.login .submit.student-submit { background: var(--orange); }
+.login .submit.teacher-submit { background: var(--green); }
+
+.notice {
+  display: none;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  background: #252a35;
+  color: #f4f5f7;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  header { padding: 16px; }
+  .badge { font-size: 10px; }
+  main { padding-top: 43px; }
+  .profiles { grid-template-columns: 1fr; gap: 15px; margin-top: 30px; }
+  .profile { padding: 23px; }
+  .profile p { min-height: 0; }
+  h1 { letter-spacing: -1.5px; }
+}
+</style></head><body><header>
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <span>StudNote<span style="color:#ffad58">.</span></span>
+  </div>
+  <div class="badge">✦ ESPACE SCOLAIRE</div>
+</header><main>
+  <section id="home">
+    <div class="intro">
+      <div class="eyebrow">✦ Bienvenue sur StudNote</div>
+      <h1>Le suivi scolaire,<br><span>en toute simplicité.</span></h1>
+      <p class="subtitle">
+        Tes notes, tes compétences et ton suivi scolaire réunis
+        dans un seul espace.
+      </p>
+    </div><div class="profiles">
+  <article class="profile student">
+    <div class="icon">🎒</div>
+    <h2>Élève</h2>
+    <p>Retrouve toutes tes informations scolaires depuis ton espace personnel.</p>
+    <ul>
+      <li>Consulter tes notes</li>
+      <li>Suivre tes moyennes</li>
+      <li>Voir tes devoirs et contrôles</li>
+      <li>Lire les appréciations</li>
+    </ul>
+    <button onclick="openLogin('student')">Accéder à mon espace ↗</button>
+  </article>
+
+  <article class="profile teacher">
+    <div class="icon">📚</div>
+    <h2>Enseignant</h2>
+    <p>Gère tes classes et accompagne tes élèves dans leur progression.</p>
+    <ul>
+      <li>Gérer les classes et les élèves</li>
+      <li>Ajouter des notes et coefficients</li>
+      <li>Calculer les moyennes</li>
+      <li>Publier devoirs et contrôles</li>
+    </ul>
+    <button onclick="openLogin('teacher')">Accéder à mon espace ↗</button>
+  </article>
 </div>
-</section><section class="card">
-<h2>👨‍🎓 Ajouter un élève</h2>
-<input id="studentName" placeholder="Pseudo de ton pote">
-<button onclick="addStudent()">Ajouter l'élève</button>
-<div id="studentList"></div>
-</section><section class="card">
-<h2>📝 Ajouter une note</h2>
-<label>Élève</label>
-<select id="studentSelect"></select>
-<label>Matière</label>
-<input id="subject" placeholder="Ex : Gaming, Maths, Troll...">
-<label>Note obtenue</label>
-<input id="grade" type="number" min="0" max="20" step="0.25" placeholder="Ex : 16">
-<label>Coefficient</label>
-<input id="coefficient" type="number" min="1" max="10" value="1">
-<button onclick="addGrade()">Enregistrer la note</button>
-<p class="small">Les moyennes sont calculées automatiquement sur 20.</p>
-</section><section class="card">
-<h2>📚 Notes enregistrées</h2>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Élève</th><th>Matière</th><th>Note</th><th>Coef.</th><th></th></tr></thead>
-<tbody id="gradesTable"></tbody>
-</table>
+
+<div class="security">
+  🔒 Les espaces Élève et Enseignant sont distincts.<br>
+  La connexion sécurisée sera activée lors de la configuration des comptes.
 </div>
-</section><section class="card">
-<h2>🧠 Compétences</h2>
-<p>Tu pourras ajouter ici les compétences personnalisées de tes élèves.</p>
-<div class="small">Prochaine étape : comptes professeur et élèves, connexion sécurisée et stockage partagé.</div>
-</section>
-</main>
-<footer>StudNote • Projet personnel entre amis</footer><script>
-let students=JSON.parse(localStorage.getItem("studnote_students")||"[]");
-let grades=JSON.parse(localStorage.getItem("studnote_grades")||"[]");
 
-function save(){
-localStorage.setItem("studnote_students",JSON.stringify(students));
-localStorage.setItem("studnote_grades",JSON.stringify(grades));
-render();
+  </section>  <section class="login" id="login">
+    <div class="icon" id="loginIcon">🎒</div>
+    <h2 id="loginTitle">Connexion Élève</h2>
+    <p class="subtitle" id="loginDescription" style="text-align:left">
+      Connecte-toi à ton espace personnel.
+    </p><form id="loginForm">
+  <label for="username">Identifiant</label>
+  <input id="username" name="username" autocomplete="username"
+         placeholder="Ton identifiant" required>
+
+  <label for="password">Mot de passe</label>
+  <input id="password" name="password" type="password"
+         autocomplete="current-password"
+         placeholder="Ton mot de passe" required>
+
+  <button class="submit student-submit" id="submitButton" type="submit">
+    Se connecter
+  </button>
+</form>
+
+<div class="notice" id="notice" role="status"></div>
+
+<button class="back" onclick="goHome()" type="button">
+  ← Retour à l'accueil
+</button>
+
+  </section>
+</main><footer>StudNote © 2026 · Un projet entre amis</footer><script>
+let selectedRole = "";
+
+function openLogin(role) {
+  selectedRole = role;
+
+  document.getElementById("home").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("notice").style.display = "none";
+
+  const isTeacher = role === "teacher";
+
+  document.getElementById("loginIcon").textContent =
+    isTeacher ? "📚" : "🎒";
+
+  document.getElementById("loginTitle").textContent =
+    isTeacher ? "Connexion Enseignant" : "Connexion Élève";
+
+  document.getElementById("loginDescription").textContent =
+    isTeacher
+      ? "Connecte-toi à ton espace de gestion des classes."
+      : "Connecte-toi pour consulter tes notes et tes moyennes.";
+
+  document.getElementById("submitButton").className =
+    "submit " + (isTeacher ? "teacher-submit" : "student-submit");
+
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  window.scrollTo(0, 0);
 }
 
-function addStudent(){
-const input=document.getElementById("studentName");
-const name=input.value.trim();
-if(!name)return alert("Entre un pseudo !");
-if(students.some(s=>s.name.toLowerCase()===name.toLowerCase()))return alert("Cet élève existe déjà !");
-students.push({id:Date.now(),name});
-input.value="";
-save();
+function goHome() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("home").style.display = "block";
+  document.getElementById("notice").style.display = "none";
+  selectedRole = "";
+  window.scrollTo(0, 0);
 }
 
-function addGrade(){
-const id=Number(document.getElementById("studentSelect").value);
-const subject=document.getElementById("subject").value.trim();
-const grade=Number(document.getElementById("grade").value);
-const coef=Number(document.getElementById("coefficient").value);
-if(!id)return alert("Ajoute d'abord un élève !");
-if(!subject)return alert("Entre une matière !");
-if(document.getElementById("grade").value===""||grade<0||grade>20)return alert("La note doit être entre 0 et 20.");
-if(!Number.isFinite(coef)||coef<1||coef>10)return alert("Le coefficient doit être entre 1 et 10.");
-grades.push({id:Date.now(),studentId:id,subject,grade,coef});
-document.getElementById("subject").value="";
-document.getElementById("grade").value="";
-save();
-}
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
 
-function removeGrade(id){
-if(confirm("Supprimer cette note ?")){
-grades=grades.filter(g=>g.id!==id);
-save();
-}
-}
-
-function render(){
-const select=document.getElementById("studentSelect");
-select.innerHTML="";
-students.forEach(s=>{
-const option=document.createElement("option");
-option.value=s.id;
-option.textContent=s.name;
-select.appendChild(option);
+  const notice = document.getElementById("notice");
+  notice.textContent =
+    "La connexion n'est pas encore activée. La prochaine étape sera de configurer les comptes et les autorisations sécurisées. Aucun mot de passe n'a été envoyé.";
+  notice.style.display = "block";
 });
-
-document.getElementById("studentList").innerHTML=students.length
-?students.map(s=>`<p>👤 ${escapeHTML(s.name)} — ${averageFor(s.id)} / 20</p>`).join("")
-:"<p class='small'>Aucun élève pour le moment.</p>";
-
-document.getElementById("gradesTable").innerHTML=grades.length
-?grades.map(g=>{
-const s=students.find(x=>x.id===g.studentId);
-return `<tr><td>${escapeHTML(s?s.name:"Élève supprimé")}</td><td>${escapeHTML(g.subject)}</td><td>${g.grade}/20</td><td>${g.coef}</td><td><button class="delete" onclick="removeGrade(${g.id})">X</button></td></tr>`;
-}).join("")
-:"<tr><td colspan='5'>Aucune note pour le moment.</td></tr>";
-
-document.getElementById("count").textContent=grades.length;
-document.getElementById("students").textContent=students.length;
-const total=grades.reduce((sum,g)=>sum+g.grade*g.coef,0);
-const coefs=grades.reduce((sum,g)=>sum+g.coef,0);
-document.getElementById("average").textContent=coefs?(total/coefs).toFixed(2)+"/20":"—";
-}
-
-function averageFor(studentId){
-const list=grades.filter(g=>g.studentId===studentId);
-const coef=list.reduce((sum,g)=>sum+g.coef,0);
-if(!coef)return "—";
-return (list.reduce((sum,g)=>sum+g.grade*g.coef,0)/coef).toFixed(2);
-}
-
-function escapeHTML(value){
-return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-render();
 </script></body>
-            </html>
+</html>
